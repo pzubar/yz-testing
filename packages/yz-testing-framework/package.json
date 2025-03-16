@@ -1,0 +1,32 @@
+{
+  "name": "@pzubar/yz-testing-framework",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/yz-testing.umd.cjs",
+  "module": "./dist/yz-testing.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/yz-testing.js",
+      "require": "./dist/yz-testing.umd.cjs"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.2",
+    "jsdom": "^26.0.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0",
+    "vitest": "^3.0.8"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.8.0"
+  }
+}

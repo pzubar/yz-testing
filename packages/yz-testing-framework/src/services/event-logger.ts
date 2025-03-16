@@ -1,0 +1,78 @@
+import { inject, singleton } from "tsyringe";
+import { ExperimentEvent } from "../types/event.ts";
+import { type ApiService } from "../types/api-service.interface.ts";
+import { type StorageService } from "../types/storage-service.interface.ts";
+
+const QUEUE_KEY = "yz-queue";
+
+@singleton()
+export class EventLogger {
+  private eventQueue: Array<ExperimentEvent> = [];
+  private loggingThreshold = 5000;
+  private sendInterval: number | null = null;
+  private isOnline: boolean = navigator.onLine;
+
+  constructor(
+    @inject("ApiClient") private api: ApiService,
+    @inject("Storage") private storage: StorageService,
+  ) {
+    this.scheduleLogging();
+    this.initializeConnectivityListeners();
+  }
+
+  async logEvent(event: ExperimentEvent): Promise<void> {
+    this.eventQueue.push(event);
+    this.persistQueue();
+  }
+
+  destroy(): void {
+    this.stopSending();
+    window.removeEventListener("online", this.handleOnlineEvent);
+    window.removeEventListener("offline", this.handleOfflineEvent);
+    window.addEventListener("beforeunload", this.beforeUnloadHandler);
+  }
+
+  private persistQueue(): void {
+    this.storage.save(QUEUE_KEY, JSON.stringify(this.eventQueue));
+  }
+
+  private async sendEventsBatch(): Promise<void> {
+    if (this.eventQueue.length === 0 || !this.isOnline) return;
+
+    const eventsToSend = [...this.eventQueue];
+
+    this.eventQueue = [];
+    try {
+      await this.api.post("/post", eventsToSend);
+    } catch (error) {
+      this.eventQueue = [...eventsToSend, ...this.eventQueue];
+      throw error;
+    }
+  }
+
+  private scheduleLogging() {
+    this.sendInterval = setInterval(() => {
+      this.sendEventsBatch();
+    }, this.loggingThreshold);
+  }
+
+  private initializeConnectivityListeners() {
+    window.addEventListener("online", this.handleOnlineEvent);
+    window.addEventListener("offline", this.handleOfflineEvent);
+  }
+
+  private stopSending() {
+    if (!this.sendInterval) return;
+    clearInterval(this.sendInterval);
+  }
+
+  private handleOnlineEvent = () => {
+    this.isOnline = true;
+  };
+
+  private handleOfflineEvent = () => {
+    this.isOnline = false;
+  };
+
+  private beforeUnloadHandler = () => {};
+}
