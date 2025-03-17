@@ -2,6 +2,11 @@
 
 The *last* A/B testing framework you need.
 
+## Simple demo app
+Visit the live demo: https://pzubar.github.io/yz-testing. See `/demo` React app for details.
+It uses React Suspend with "optimistic" UI banner to demonstrate the way to avoid the visible flicker
+while the framework is being loaded.
+
 ## Features
 
 - Deterministic variant assignment
@@ -126,9 +131,3 @@ yzTesting.getExperimentValue('experiment-id');
 ## Notes
 - The framework includes a simulated async load (500ms delay) during initialization
 - Dependency injection is handled automatically during initialization
-
-# Simple demo app
-Visit the live demo: https://pzubar.github.io/yz-testing. See `/demo` React app for details. 
-It uses React Suspend with "optimistic" UI banner to demonstrate the way to avoid the visible flicker
-while the framework is being loaded.
-
