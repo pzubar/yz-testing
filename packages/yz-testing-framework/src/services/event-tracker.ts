@@ -3,7 +3,7 @@ import { Event, ExposureEvent, InteractionEvent } from "../types/event.ts";
 import { EventLogger } from "./event-logger.ts";
 
 @injectable()
-export class EventTracker {
+class EventTracker {
   constructor(private eventLogger: EventLogger) {}
 
   async trackExposure(experimentId: string, variantId: string): Promise<void> {
@@ -31,3 +31,5 @@ export class EventTracker {
     await this.eventLogger.logEvent(event);
   }
 }
+
+export default EventTracker;

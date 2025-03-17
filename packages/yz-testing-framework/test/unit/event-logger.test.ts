@@ -1,8 +1,9 @@
 // tests/event-logger-service.test.ts
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { EventLogger } from "../../src/services/event-logger";
-import { FetchApiService } from "../../src/services/fetch-api";
-import { LocalStorageService } from "../../src/services/local-storage";
+import FetchApiService from "../../src/services/fetch-api";
+import LocalStorageService from "../../src/services/local-storage";
+import ConfigurationService from "../../src/services/config";
 
 describe("EventLogger", () => {
   let eventLogger: EventLogger;
@@ -23,7 +24,7 @@ describe("EventLogger", () => {
     vi.useFakeTimers();
     mockFetch.mockClear();
     eventLogger = new EventLogger(
-      new FetchApiService(),
+      new FetchApiService(new ConfigurationService()),
       new LocalStorageService(),
     );
   });

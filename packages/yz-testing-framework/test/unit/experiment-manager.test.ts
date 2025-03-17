@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { ExperimentManager } from "../../src/services/experiment-manager";
-import { EventTracker } from "../../src/services/event-tracker";
+import ExperimentManager from "../../src/services/experiment-manager";
+import EventTracker from "../../src/services/event-tracker";
 import { ExperimentVariant } from "../../src/types/experiment";
-import { VariantAssignmentService } from "../../src/services/variant-assignment";
+import VariantAssignmentService from "../../src/services/variant-assignment";
 import { UserIdentityService } from "../../src/services/user-identity";
 import { mockExperiment } from "../mock-data/experiments.mock";
 
@@ -40,18 +40,8 @@ describe("ExperimentManager", () => {
     );
   });
 
-  it("should initialize experiments", async () => {
-    await experimentManager.initializeExperiments([mockExperiment]);
-
-    const activeExperiment = await experimentManager.getExperiment(
-      mockExperiment.id,
-    );
-
-    expect(activeExperiment).toEqual(mockExperiment);
-  });
-
   it("should assign a variant and track exposure for an experiment", async () => {
-    await experimentManager.initializeExperiments([mockExperiment]);
+    await experimentManager.setExperiments([mockExperiment]);
     const result = await experimentManager.getVariantAndTrack(
       mockExperiment.id,
     );

@@ -1,0 +1,5 @@
+packages:
+  - 'packages/yz-testing-framework'
+  - 'demo'
+  - '!**/test/**'
+  - '!**/node_modules/**'

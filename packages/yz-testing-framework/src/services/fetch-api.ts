@@ -1,17 +1,15 @@
 import { ApiService } from "../types/api-service.interface.ts";
+import { injectable } from "tsyringe";
+import ConfigService from "./config.ts";
 
-export interface ApiClientConfig {
-  baseURL?: string;
-  timeoutMs?: number;
-}
-
-export class FetchApiService implements ApiService {
+@injectable()
+class FetchApiService implements ApiService {
   private readonly baseURL: string;
   private readonly timeoutMs: number;
 
-  constructor(config?: ApiClientConfig) {
-    this.baseURL = config?.baseURL || "https://httpbin.org";
-    this.timeoutMs = config?.timeoutMs || 5000;
+  constructor(private config: ConfigService) {
+    this.baseURL = this.config.apiEndpoint;
+    this.timeoutMs = this.config.requestTimeoutMs;
   }
 
   async post<T>(url: string, body?: unknown): Promise<T> {
@@ -84,3 +82,5 @@ export class FetchApiService implements ApiService {
     }
   }
 }
+
+export default FetchApiService;

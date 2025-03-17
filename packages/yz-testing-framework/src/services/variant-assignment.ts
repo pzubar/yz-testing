@@ -1,9 +1,8 @@
-// services/variant-assignment.service.ts
 import { Experiment, ExperimentVariant } from "../types/experiment.ts";
 import { singleton } from "tsyringe";
 
 @singleton()
-export class VariantAssignmentService {
+class VariantAssignmentService {
   /**
    * Assigns a variant to the user for a given experiment. Once a variant is assigned,
    * the same variant will always be returned for that experiment and user combination.
@@ -51,3 +50,5 @@ export class VariantAssignmentService {
     return (hash >>> 0) / 0xffffffff;
   }
 }
+
+export default VariantAssignmentService;

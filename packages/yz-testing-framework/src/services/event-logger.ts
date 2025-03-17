@@ -29,7 +29,6 @@ export class EventLogger {
     this.stopSending();
     window.removeEventListener("online", this.handleOnlineEvent);
     window.removeEventListener("offline", this.handleOfflineEvent);
-    window.addEventListener("beforeunload", this.beforeUnloadHandler);
   }
 
   private persistQueue(): void {
@@ -47,6 +46,8 @@ export class EventLogger {
     } catch (error) {
       this.eventQueue = [...eventsToSend, ...this.eventQueue];
       throw error;
+    } finally {
+      this.persistQueue();
     }
   }
 
@@ -73,6 +74,4 @@ export class EventLogger {
   private handleOfflineEvent = () => {
     this.isOnline = false;
   };
-
-  private beforeUnloadHandler = () => {};
 }

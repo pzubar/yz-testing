@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { LocalStorageService } from "../../src/services/local-storage";
+import LocalStorageService from "../../src/services/local-storage";
 
 describe("LocalStorageService", () => {
   let localStorageService: LocalStorageService;
@@ -25,13 +25,10 @@ describe("LocalStorageService", () => {
     const key = "test-key";
     const value = "test-value";
 
-    // Set a value in localStorage directly
     localStorage.setItem(key, JSON.stringify(value));
 
-    // Retrieve the value using the service
     const result = localStorageService.load(key);
 
-    // Assert the retrieved value is correct
     expect(result).toBe(value);
   });
 
@@ -47,16 +44,11 @@ describe("LocalStorageService", () => {
 
   it("should handle exceptions when loading fails", () => {
     const key = "test-key";
-
-    // Mock getItem to throw an error
     const error = new Error("Failed to access localStorage");
+
     vi.spyOn(localStorage, "getItem").mockImplementation(() => {
       throw error;
     });
-
-    // Spy on console.error to check if the error is logged
-
-    // Attempt to load a value
     const result = localStorageService.load(key);
 
     // Assert that `null` is returned when an error occurs

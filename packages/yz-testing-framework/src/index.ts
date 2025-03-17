@@ -1,3 +1,3 @@
 import "reflect-metadata";
 
-export * from "./YZTesting";
+export { YZTesting } from "./YZTesting";

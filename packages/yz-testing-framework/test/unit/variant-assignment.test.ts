@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { VariantAssignmentService } from "../../src/services/variant-assignment";
+import VariantAssignmentService from "../../src/services/variant-assignment";
 import { Experiment } from "../../src/types/experiment";
 
 describe("VariantAssignmentService", () => {

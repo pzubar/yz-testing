@@ -1,6 +1,6 @@
 import { type StorageService } from "../types/storage-service.interface.ts";
 
-export class LocalStorageService implements StorageService {
+class LocalStorageService implements StorageService {
   storage: Storage;
 
   constructor() {
@@ -24,3 +24,5 @@ export class LocalStorageService implements StorageService {
     this.storage.removeItem(key);
   }
 }
+
+export default LocalStorageService;

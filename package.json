@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "pnpm --filter demo dev",
     "build": "pnpm --filter @pzubar/yz-testing-framework build",
     "test": "pnpm --filter @pzubar/yz-testing-framework test",
     "lint": "eslint"

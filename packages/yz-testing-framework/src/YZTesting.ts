@@ -1,22 +1,37 @@
 import { YZTestingConfig } from "./types/config.ts";
 import { Experiment } from "./types/experiment.ts";
 import { container } from "tsyringe";
-import { ExperimentManager } from "./services/experiment-manager.ts";
-import { FetchApiService } from "./services/fetch-api.ts";
+import ExperimentManager from "./services/experiment-manager.ts";
+import FetchApiService from "./services/fetch-api.ts";
+import ConfigurationService from "./services/config.ts";
+import LocalStorageService from "./services/local-storage.ts";
 
 export class YZTesting {
-  private readonly config: YZTestingConfig;
   private isInitialized: boolean = false;
-  private experimentManager = container.resolve(ExperimentManager);
+  private experimentManager: ExperimentManager;
 
   constructor(config: YZTestingConfig) {
-    this.config = config;
-    this.setupContainer();
+    this.setupContainer(config);
+    this.experimentManager = container.resolve(ExperimentManager);
   }
 
-  async initialize(experiments: Array<Experiment>) {
-    await this.experimentManager.initializeExperiments(experiments);
+  setExperiments(experiments: Array<Experiment>) {
+    this.experimentManager.setExperiments(experiments);
     this.isInitialized = true;
+  }
+
+  static async init({
+    config,
+    experiments,
+  }: {
+    config: YZTestingConfig;
+    experiments: Array<Experiment>;
+  }) {
+    const instance = new YZTesting(config);
+
+    await new Promise((resolve) => setTimeout(resolve, 500)); // simulate async load
+    instance.setExperiments(experiments);
+    return instance;
   }
 
   async trackInteraction(experimentId: string): Promise<void> {
@@ -24,19 +39,18 @@ export class YZTesting {
     await this.experimentManager.trackInteraction(experimentId);
   }
 
-  getExperimentValue<T>(experimentId: string, fallback: T): T {
+  getExperimentValue<T>(experimentId: string, fallback?: T): T | null {
     this.ensureInitialized();
 
-    return (
-      (this.experimentManager.getVariantAndTrack(experimentId)?.value as T) ||
-      fallback
-    );
+    const value = this.experimentManager.getVariantAndTrack(experimentId)
+      ?.value as T;
+    return value || fallback || null;
   }
 
-  private setupContainer(): void {
-    container.register("ApiClient", {
-      useValue: new FetchApiService({ baseURL: this.config.apiEndpoint }),
-    });
+  private setupContainer(config: YZTestingConfig): void {
+    container.resolve(ConfigurationService).assign(config);
+    container.register("ApiClient", { useClass: FetchApiService });
+    container.register("Storage", { useClass: LocalStorageService });
   }
 
   private ensureInitialized(): void {
