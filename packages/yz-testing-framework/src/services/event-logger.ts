@@ -18,6 +18,7 @@ class EventLoggerService {
   ) {
     this.scheduleLogging();
     this.initializeConnectivityListeners();
+    this.sendEventsBatch();
   }
 
   async logEvent(event: ExperimentEvent): Promise<void> {
