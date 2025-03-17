@@ -1,27 +1,42 @@
 import { inject, singleton } from "tsyringe";
-import { type StorageService } from "../types/storage-service.interface.ts";
+import { type StorageService } from "@yz/types/storage-service.interface.ts";
+import ConfigurationService from "@yz/services/config.ts";
+
+const USER_ID_KEY = "yz-user-id";
 
 @singleton()
-export class UserIdentityService {
-  private readonly USER_ID_KEY = "yz-user-id";
+class UserIdentityService {
+  constructor(
+    @inject("Storage") private storage: StorageService,
+    private config: ConfigurationService,
+  ) {
+    if (this.config.userId) {
+      this.saveUserId(this.config.userId);
+    }
+    if (this.getUserId()) return;
 
-  constructor(@inject("Storage") private storage: StorageService) {}
+    this.generateUser();
+  }
 
-  getUserId(): string {
-    const storedUserId = this.storage.load<string>(this.USER_ID_KEY);
+  getUserId(): string | null {
+    debugger;
+    return this.storage.load<string>(USER_ID_KEY);
+  }
 
-    if (storedUserId) return storedUserId;
-
+  generateUser() {
     const newId = this.generateUserId();
     this.saveUserId(newId);
     return newId;
   }
 
   private saveUserId(id: string): void {
-    this.storage.save(this.USER_ID_KEY, id);
+    debugger;
+    this.storage.save(USER_ID_KEY, id);
   }
 
   private generateUserId(): string {
     return crypto.randomUUID();
   }
 }
+
+export default UserIdentityService;

@@ -1,15 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import ExperimentManager from "../../src/services/experiment-manager";
-import EventTracker from "../../src/services/event-tracker";
-import { ExperimentVariant } from "../../src/types/experiment";
-import VariantAssignmentService from "../../src/services/variant-assignment";
-import { UserIdentityService } from "../../src/services/user-identity";
-import { mockExperiment } from "../mock-data/experiments.mock";
+import ExperimentManager from "@yz/services/experiment-manager.ts";
+import EventTrackerService from "@yz/services/event-tracker.ts";
+import { ExperimentVariant } from "@yz/types/experiment.ts";
+import VariantAssignmentService from "@yz/services/variant-assignment.ts";
+import UserIdentityService from "@yz/services/user-identity.ts";
+import { mockExperiment } from "../../mock-data/experiments.mock.ts";
 
 const mockExposeTracker = vi.fn();
 const mockInteractionTracker = vi.fn();
 
-const eventTrackerMock: Partial<EventTracker> = {
+const eventTrackerMock: Partial<EventTrackerService> = {
   trackExposure: mockExposeTracker,
   trackInteraction: mockInteractionTracker,
 };
@@ -26,7 +26,6 @@ const variantAssignmentMock: Partial<VariantAssignmentService> = {
   },
 };
 
-// Tests
 describe("ExperimentManager", () => {
   let experimentManager: ExperimentManager;
 
@@ -34,7 +33,7 @@ describe("ExperimentManager", () => {
     // Reset mocks before each test
     vi.clearAllMocks();
     experimentManager = new ExperimentManager(
-      eventTrackerMock as EventTracker,
+      eventTrackerMock as EventTrackerService,
       { getUserId: () => "user-123" } as UserIdentityService, // Mock user ID service
       variantAssignmentMock as VariantAssignmentService,
     );

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import VariantAssignmentService from "../../src/services/variant-assignment";
-import { Experiment } from "../../src/types/experiment";
+import VariantAssignmentService from "@yz/services/variant-assignment.ts";
+import { Experiment } from "@yz/types/experiment.ts";
 
 describe("VariantAssignmentService", () => {
   let variantAssignmentService: VariantAssignmentService;

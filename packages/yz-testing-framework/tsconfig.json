@@ -23,7 +23,11 @@
 
     /* Make ts */
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+
+    "paths": {
+      "@yz/*": ["./src/*"],
+    }
   },
   "include": ["src"]
 }

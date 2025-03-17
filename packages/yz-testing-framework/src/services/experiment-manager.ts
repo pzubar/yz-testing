@@ -1,21 +1,22 @@
 import { singleton } from "tsyringe";
-import { ExperimentVariant, Experiment } from "../types/experiment.ts";
-import { UserIdentityService } from "./user-identity.ts";
-import VariantAssignmentService from "./variant-assignment.ts";
-import EventTracker from "./event-tracker.ts";
+import { ExperimentVariant, Experiment } from "@yz/types/experiment.ts";
+import UserIdentityService from "@yz/services/user-identity.ts";
+import VariantAssignmentService from "@yz/services/variant-assignment.ts";
+import EventTrackerService from "@yz/services/event-tracker.ts";
 
 @singleton()
 class ExperimentManager {
   private experiments: Map<string, Experiment> = new Map();
 
   constructor(
-    private eventTracker: EventTracker,
+    private eventTracker: EventTrackerService,
     private userIdentity: UserIdentityService,
     private variantAssignment: VariantAssignmentService,
   ) {}
 
   setExperiments(experiments: Experiment[]) {
     experiments.forEach((experiment) => {
+      this.validateExperiment(experiment);
       this.experiments.set(experiment.id, experiment);
     });
   }
@@ -24,9 +25,12 @@ class ExperimentManager {
     const experiment = this.experiments.get(experimentId);
     if (!experiment) return null;
 
+    const userId = this.userIdentity.getUserId();
+    if (!userId) return null;
+
     const variant = this.variantAssignment.getAssignedVariant(
       experiment,
-      this.userIdentity.getUserId(),
+      userId,
     );
     if (!variant) return null;
 
@@ -39,15 +43,33 @@ class ExperimentManager {
     const experiment = this.experiments.get(experimentId);
 
     if (!experiment) return;
+    const userId = this.userIdentity.getUserId();
 
+    if (!userId) return;
     const variant = this.variantAssignment.getAssignedVariant(
       experiment,
-      this.userIdentity.getUserId(),
+      userId,
     );
 
     if (!variant) return;
 
     await this.eventTracker.trackInteraction(experimentId, variant.id);
+  }
+
+  private validateExperiment(experiment: Experiment) {
+    const error = "Invalid experiment";
+
+    if (
+      !experiment ||
+      !experiment.id ||
+      !Array.isArray(experiment.variants) ||
+      !experiment.variants.length
+    )
+      throw new Error(error);
+    if (experiment.variants.reduce((sum, v) => sum + v.weight, 0) !== 100)
+      throw new Error(error);
+    if (experiment.variants.some((v) => !v.value || !v.id))
+      throw new Error(error);
   }
 }
 

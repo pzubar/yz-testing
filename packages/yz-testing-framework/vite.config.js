@@ -13,6 +13,11 @@ export default defineConfig({
     },
     minify: false, // Disable minification
   },
+  resolve: {
+    alias: {
+      "@yz": resolve(__dirname, "src/"),
+    },
+  },
   test: {
     environment: "jsdom",
   },

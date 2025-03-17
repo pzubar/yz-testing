@@ -1,6 +1,6 @@
-import { ApiService } from "../types/api-service.interface.ts";
+import { ApiService } from "@yz/types/api-service.interface.ts";
 import { injectable } from "tsyringe";
-import ConfigService from "./config.ts";
+import ConfigService from "@yz/services/config.ts";
 
 @injectable()
 class FetchApiService implements ApiService {

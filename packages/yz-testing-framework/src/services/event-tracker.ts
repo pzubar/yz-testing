@@ -1,10 +1,10 @@
 import { injectable } from "tsyringe";
-import { Event, ExposureEvent, InteractionEvent } from "../types/event.ts";
-import { EventLogger } from "./event-logger.ts";
+import { Event, ExposureEvent, InteractionEvent } from "@yz/types/event.ts";
+import EventLoggerService from "@yz/services/event-logger.ts";
 
 @injectable()
-class EventTracker {
-  constructor(private eventLogger: EventLogger) {}
+class EventTrackerService {
+  constructor(private eventLogger: EventLoggerService) {}
 
   async trackExposure(experimentId: string, variantId: string): Promise<void> {
     const event: ExposureEvent = {
@@ -32,4 +32,4 @@ class EventTracker {
   }
 }
 
-export default EventTracker;
+export default EventTrackerService;

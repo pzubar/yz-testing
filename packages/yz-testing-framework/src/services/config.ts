@@ -5,6 +5,7 @@ import { singleton } from "tsyringe";
 class ConfigurationService {
   apiEndpoint = "https://httpbin.org";
   requestTimeoutMs = 5000;
+  userId: string | null = null;
 
   assign(config: YZTestingConfig) {
     Object.assign(this, config);

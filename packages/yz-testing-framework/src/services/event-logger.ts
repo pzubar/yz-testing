@@ -1,12 +1,12 @@
 import { inject, singleton } from "tsyringe";
-import { ExperimentEvent } from "../types/event.ts";
-import { type ApiService } from "../types/api-service.interface.ts";
-import { type StorageService } from "../types/storage-service.interface.ts";
+import { ExperimentEvent } from "@yz/types/event.ts";
+import { type ApiService } from "@yz/types/api-service.interface.ts";
+import { type StorageService } from "@yz/types/storage-service.interface.ts";
 
 const QUEUE_KEY = "yz-queue";
 
 @singleton()
-export class EventLogger {
+class EventLoggerService {
   private eventQueue: Array<ExperimentEvent> = [];
   private loggingThreshold = 5000;
   private sendInterval: number | null = null;
@@ -75,3 +75,5 @@ export class EventLogger {
     this.isOnline = false;
   };
 }
+
+export default EventLoggerService;

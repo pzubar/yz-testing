@@ -1,15 +1,12 @@
-// tests/event-logger-service.test.ts
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
-import { EventLogger } from "../../src/services/event-logger";
-import FetchApiService from "../../src/services/fetch-api";
-import LocalStorageService from "../../src/services/local-storage";
-import ConfigurationService from "../../src/services/config";
+import EventLoggerService from "@yz/services/event-logger.ts";
+import FetchApiService from "@yz/services/fetch-api.ts";
+import LocalStorageService from "@yz/services/local-storage.ts";
+import ConfigurationService from "@yz/services/config.ts";
 
-describe("EventLogger", () => {
-  let eventLogger: EventLogger;
+describe("UserIdentityService", () => {
+  let eventLogger: EventLoggerService;
   const mockURL = "https://httpbin.org/post";
-
-  // Mock fetch
   const mockFetch = vi.fn(() => {
     return Promise.resolve({
       ok: true,
@@ -23,14 +20,14 @@ describe("EventLogger", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     mockFetch.mockClear();
-    eventLogger = new EventLogger(
+    eventLogger = new EventLoggerService(
       new FetchApiService(new ConfigurationService()),
       new LocalStorageService(),
     );
   });
 
   afterEach(() => {
-    eventLogger.destroy(); // Clean up after each test
+    eventLogger.destroy();
     vi.useRealTimers();
   });
 
@@ -61,8 +58,6 @@ describe("EventLogger", () => {
     Object.defineProperty(navigator, "onLine", { value: true });
     window.dispatchEvent(new Event("online"));
     vi.advanceTimersByTime(5000);
-
-    // Expect events to be sent immediately
     expect(mockFetch).toHaveBeenCalledTimes(1);
     expect(mockFetch).toHaveBeenCalledWith(
       mockURL,

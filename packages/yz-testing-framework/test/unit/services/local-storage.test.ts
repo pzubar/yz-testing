@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import LocalStorageService from "../../src/services/local-storage";
+import LocalStorageService from "@yz/services/local-storage.ts";
 
 describe("LocalStorageService", () => {
   let localStorageService: LocalStorageService;
