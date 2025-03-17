@@ -30,13 +30,25 @@ import YZTesting from '@pzubar/yz-testing-framework';
 
 // Configuration
 const config = {
-  // Your configuration options
+  /** Custom user ID for manual user identification, i.e. the id from the database  */
+  userId?: string;
+
+  /** Base URL for the API endpoints (defaults to https://httpbin.org) */
+  apiEndpoint?: string;
+
+  /** Base URL for the API endpoints (defaults to 5000) */
+  requestTimeoutMs?: number;
 };
 
 // Experiments definition
-const experiments = [
-  // Your experiments array
-];
+const experiments = [{
+  id: string;
+  variants: [
+      id: string;
+      weight: number;
+      value: JSON | string | number;
+  ]
+}];
 
 // Initialize the framework
 const yzTesting = await YZTesting.init({ config, experiments });
@@ -91,7 +103,7 @@ Retrieves the variant value for a specific experiment and automatically tracks t
 ## Dependencies
 The framework uses the following key dependencies:
 - `tsyringe` for dependency injection
-- Types defined in `./types/config.ts` and `./types/experiment.ts`
+- Types defined in `types/*`
 - Various services for handling API calls, configuration, and storage
 
 ## Services
@@ -110,11 +122,6 @@ The framework will throw an error if methods are called before initialization. A
 // This will throw an error if called before initialization
 yzTesting.getExperimentValue('experiment-id');
 ```
-
-## Type Definitions
-For detailed type information, refer to:
-- `YZTestingConfig` in `./types/config.ts`
-- `Experiment` in `./types/experiment.ts`
 
 ## Notes
 - The framework includes a simulated async load (500ms delay) during initialization
