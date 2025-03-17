@@ -11,7 +11,7 @@ export default defineConfig({
       name: "yz-testing",
       fileName: "yz-testing",
     },
-    minify: false, // Disable minification
+    minify: process.env.CI,
   },
   resolve: {
     alias: {

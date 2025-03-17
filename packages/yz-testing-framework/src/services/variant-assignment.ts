@@ -6,9 +6,6 @@ class VariantAssignmentService {
   /**
    * Assigns a variant to the user for a given experiment. Once a variant is assigned,
    * the same variant will always be returned for that experiment and user combination.
-   * @param experiment The experiment for which to assign a variant.
-   * @param userId The unique identifier of the user.
-   * @returns The assigned experiment variant.
    */
   getAssignedVariant(
     experiment: Experiment,
@@ -36,8 +33,6 @@ class VariantAssignmentService {
   /**
    * Hash function to generate a deterministic, pseudo-random number between 0 and 1
    * for a given input string (e.g., `${userId}:${experimentId}`).
-   * @param input The input string to hash.
-   * @returns A number between 0 (inclusive) and 1 (exclusive).
    */
   private generateHash(input: string): number {
     let hash = 0;

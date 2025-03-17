@@ -7,12 +7,15 @@ import ConfigurationService from "@yz/services/config.ts";
 describe("UserIdentityService", () => {
   let eventLogger: EventLoggerService;
   const mockURL = "https://httpbin.org/post";
-  const mockFetch = vi.fn(() => {
+  const mockFetch = vi.fn((url, data) => {
     return Promise.resolve({
       ok: true,
       status: 200,
       headers: new Headers({ "Content-Type": "application/json" }),
-      json: () => Promise.resolve(),
+      json: () =>
+        Promise.resolve({
+          data: data.body,
+        }),
     });
   });
   global.fetch = mockFetch;

@@ -1,5 +1,5 @@
 import { inject, singleton } from "tsyringe";
-import { ExperimentEvent } from "@yz/types/event.ts";
+import { ExperimentEvent, EventResponse } from "@yz/types/event.ts";
 import { type ApiService } from "@yz/types/api-service.interface.ts";
 import { type StorageService } from "@yz/types/storage-service.interface.ts";
 
@@ -42,7 +42,11 @@ class EventLoggerService {
 
     this.eventQueue = [];
     try {
-      await this.api.post("/post", eventsToSend);
+      const response = await this.api.post<EventResponse>(
+        "/post",
+        eventsToSend,
+      );
+      this.validateResponse(response, eventsToSend);
     } catch (error) {
       this.eventQueue = [...eventsToSend, ...this.eventQueue];
       throw error;
@@ -74,6 +78,14 @@ class EventLoggerService {
   private handleOfflineEvent = () => {
     this.isOnline = false;
   };
+
+  private validateResponse(
+    response: EventResponse,
+    eventsToSend: Array<ExperimentEvent>,
+  ) {
+    if (response.data !== JSON.stringify(eventsToSend))
+      throw new Error("Invalid response");
+  }
 }
 
 export default EventLoggerService;

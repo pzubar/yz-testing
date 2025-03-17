@@ -14,12 +14,7 @@ const eventTrackerMock: Partial<EventTrackerService> = {
   trackInteraction: mockInteractionTracker,
 };
 
-const mockAssignedVariant: ExperimentVariant = {
-  id: "variant-a",
-  weight: 50,
-  value: { type: "string", value: "variant-a-value" },
-};
-
+const mockAssignedVariant: ExperimentVariant = mockExperiment.variants[0];
 const variantAssignmentMock: Partial<VariantAssignmentService> = {
   getAssignedVariant(): ExperimentVariant | null {
     return mockAssignedVariant;

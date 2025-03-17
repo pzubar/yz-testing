@@ -4,9 +4,13 @@ import EventLoggerService from "@yz/services/event-logger.ts";
 
 @injectable()
 class EventTrackerService {
+  exposedExperimentsIds: Array<string> = [];
+
   constructor(private eventLogger: EventLoggerService) {}
 
   async trackExposure(experimentId: string, variantId: string): Promise<void> {
+    if (this.exposedExperimentsIds.includes(experimentId)) return;
+
     const event: ExposureEvent = {
       eventType: Event.EXPOSURE,
       experimentId,
@@ -15,6 +19,7 @@ class EventTrackerService {
     };
 
     await this.eventLogger.logEvent(event);
+    this.exposedExperimentsIds.push(experimentId);
   }
 
   async trackInteraction(

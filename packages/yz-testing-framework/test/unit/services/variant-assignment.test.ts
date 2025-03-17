@@ -20,20 +20,16 @@ describe("VariantAssignmentService", () => {
 
   it("should deterministically assign the same variant for the same user across multiple runs", () => {
     const userId = "user-123";
-
     // Run the assignment multiple times (10 iterations) to verify determinism
     const assignedVariants = Array.from({ length: 10 }, () =>
       variantAssignmentService.getAssignedVariant(mockExperiment, userId),
     );
 
-    // All assigned variants should be the same
     assignedVariants.forEach((variant, index) => {
       if (index > 0) {
-        expect(variant).toEqual(assignedVariants[0]); // Ensure all assigned variants are consistent
+        expect(variant).toEqual(assignedVariants[0]);
       }
     });
-
-    // Verify that the assigned variant exists in the experiment's variants
     expect(mockExperiment.variants).toContainEqual(assignedVariants[0]);
   });
 
@@ -49,7 +45,7 @@ describe("VariantAssignmentService", () => {
       user2Id,
     );
 
-    // Ensure that the assigned variants are different for the two users
+    // Ensure that the assigned variants are different for the two users with different
     expect(assignedVariant1).not.toEqual(assignedVariant2);
 
     // Verify that the assigned variants exist in the experiment's variants

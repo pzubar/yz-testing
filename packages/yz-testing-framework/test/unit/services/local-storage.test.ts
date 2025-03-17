@@ -34,11 +34,8 @@ describe("LocalStorageService", () => {
 
   it("should return null for non-existent keys", () => {
     const key = "non-existent-key";
-
-    // Retrieve a non-existent key
     const result = localStorageService.load(key);
 
-    // Assert that null is returned
     expect(result).toBeNull();
   });
 
@@ -51,7 +48,6 @@ describe("LocalStorageService", () => {
     });
     const result = localStorageService.load(key);
 
-    // Assert that `null` is returned when an error occurs
     expect(result).toBeNull();
   });
 });

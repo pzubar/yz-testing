@@ -11,21 +11,16 @@ describe("UserIdentityService", () => {
   const MOCK_UUID = "12345678-1234-1234-1234-123456789012";
 
   beforeEach(() => {
-    // Mock the storage service
     storageMock = {
       save: vi.fn(),
       load: vi.fn(),
     };
-
-    // Mock the configuration service
     configMock = {
       userId: null,
       apiEndpoint: "",
       requestTimeoutMs: 5000,
       assign: vi.fn(),
     };
-
-    // Mock crypto.randomUUID
     vi.spyOn(crypto, "randomUUID").mockReturnValue(MOCK_UUID);
   });
 
@@ -79,7 +74,6 @@ describe("UserIdentityService", () => {
     it("should return null if no userId exists", () => {
       storageMock.load.mockReturnValue(null);
       userIdentityService = new UserIdentityService(storageMock, configMock);
-      // Clear mocks after construction to test getUserId specifically
       vi.clearAllMocks();
 
       const result = userIdentityService.getUserId();

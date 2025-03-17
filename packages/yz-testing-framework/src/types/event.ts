@@ -16,4 +16,8 @@ export interface InteractionEvent extends BaseEvent {
   eventType: Event.INTERACTION;
 }
 
+export interface EventResponse {
+  data: string;
+}
+
 export type ExperimentEvent = ExposureEvent | InteractionEvent;

@@ -1,4 +1,4 @@
-import { type StorageService } from "../types/storage-service.interface.ts";
+import { type StorageService } from "@yz/types/storage-service.interface.ts";
 
 class LocalStorageService implements StorageService {
   storage: Storage;
@@ -8,7 +8,11 @@ class LocalStorageService implements StorageService {
   }
 
   save<T>(key: string, data: T): void {
-    this.storage.setItem(key, JSON.stringify(data));
+    try {
+      this.storage.setItem(key, JSON.stringify(data));
+    } catch {
+      // noop
+    }
   }
 
   load<T>(key: string): T | null {
@@ -18,10 +22,6 @@ class LocalStorageService implements StorageService {
     } catch {
       return null;
     }
-  }
-
-  remove(key: string): void {
-    this.storage.removeItem(key);
   }
 }
 

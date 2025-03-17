@@ -34,9 +34,8 @@ class FetchApiService implements ApiService {
       clearTimeout(timeoutMs);
 
       if (!response.ok) {
-        const errorMessage = await this.parseError(response);
         throw new Error(
-          `HTTP Error: ${response.status} - ${response.statusText}. ${errorMessage || ""}`,
+          `HTTP Error: ${response.status} - ${response.statusText}.`,
         );
       }
 
@@ -63,23 +62,6 @@ class FetchApiService implements ApiService {
 
     // Return raw text if the content type isn't JSON
     return response.text() as unknown as T;
-  }
-
-  /**
-   * Extract error details from the response if possible.
-   */
-  private async parseError(response: Response): Promise<string> {
-    try {
-      const contentType = response.headers.get("Content-Type");
-      if (contentType && contentType.includes("application/json")) {
-        const errorData = await response.json();
-        return errorData.message || JSON.stringify(errorData);
-      }
-
-      return await response.text();
-    } catch {
-      return "An error occurred but could not retrieve error details.";
-    }
   }
 }
 

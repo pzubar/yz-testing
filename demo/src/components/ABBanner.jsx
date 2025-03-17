@@ -15,11 +15,7 @@ export function ABBanner({ abTestingLibrary }) {
     <div className="banner-container">
       <h2>{value.title}</h2>
       <p>{value.description}</p>
-      <button
-        onClick={() =>
-          abTesting.trackInteraction({ experimentId: EXPERIMENT_ID })
-        }
-      >
+      <button onClick={() => abTesting.trackInteraction(EXPERIMENT_ID)}>
         {value.buttonText}
       </button>
     </div>

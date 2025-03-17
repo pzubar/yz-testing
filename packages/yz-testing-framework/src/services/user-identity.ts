@@ -19,7 +19,6 @@ class UserIdentityService {
   }
 
   getUserId(): string | null {
-    debugger;
     return this.storage.load<string>(USER_ID_KEY);
   }
 
@@ -30,7 +29,6 @@ class UserIdentityService {
   }
 
   private saveUserId(id: string): void {
-    debugger;
     this.storage.save(USER_ID_KEY, id);
   }
 
